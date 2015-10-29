@@ -6,6 +6,10 @@
 @section('inner_content')
 @include('section.default_errors')
 
+    <ol class="breadcrumb light-green-box">
+		<li><a href="<?php echo URL::to('/').'/users'; ?>">Users</a></li>
+		<li><a href="<?php echo URL::to('/').'/update-user/'.$user->slug; ?>">Update User</a></li>
+	</ol>
     <!-- Profile -->
     @include('user.account.profile', array('user' => $user))
     

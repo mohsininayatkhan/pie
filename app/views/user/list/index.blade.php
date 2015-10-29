@@ -13,7 +13,13 @@
 	<div class="row">
     	{{ Form::open(array('url' => 'users','method'=>'GET', 'name'=> 'frmUser', 'id'=>'frmUser')) }}
     	<div class="col-sm-4">
-    		<input type="text" name="keyword" id="keyword" value="<?php echo Input::old('filter');?>" class="form-control" placeholder="Search"/>
+    		<div class="form-group input-group">
+                <input id="keyword" name="keyword" type="text" autocomplete="off" value="<?php echo Input::old('keyword') ?>" class="form-control typeahead" placeholder="I am looking for">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="button" id="search-listing-btn">
+                        <i class="fa fa-search"></i>
+                    </button> </span>
+            </div>
     		<input type="submit" style="position: absolute; left: -9999px; width: 1px; height: 1px;" tabindex="-1" />
     	</div>
     	<div class="col-sm-2">
@@ -37,6 +43,7 @@
 			        <th>Name</th>
 			        <th>Email</th>
 			        <th>Phone</th>
+			        <th>Action</th>
 			    </tr>
 	  		</thead>
 	  		<tbody>
@@ -45,6 +52,19 @@
     				<td>{{ $user->fname.' '.$user->lname }}</td>
 		      		<td>{{ $user->email }}</td>
 		      		<td>{{ $user->phone }}</td>
+		      		<td>
+		      			<div class="dropdown">
+                            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">Action
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                                <li role="presentation"><a title="<?php echo $user->fname; ?>" id="update-<?php echo Crypt::encrypt($user->slug)?>" role="menuitem" tabindex="-1" class="del-ad" href="<?php echo URL::to('/') . '/update-user/' . $user->slug; ?>"><span class="glyphicon glyphicon-update"></span> Update</a></li>
+                                <li role="presentation"><a title="<?php echo $user->fname; ?>" id="user-ads-<?php echo Crypt::encrypt($user->id)?>" role="menuitem" tabindex="-1" class="del-ad" href="<?php echo URL::to('/') . '/user-ads/' . $user->slug; ?>"><span class="glyphicon glyphicon-arrow-up"></span> Ads</a></li>
+                                <li role="presentation"><a title="<?php echo $user->fname; ?>" id="delete-<?php echo Crypt::encrypt($user->id)?>" role="menuitem" tabindex="-1" class="del-ad" href="#"><span class="glyphicon glyphicon-trash"></span> Delete</a></li>
+                                <!--li role="presentation"><a role="menuitem" tabindex="-1" href="#"><span class="glyphicon glyphicon-arrow-up"></span> Promote</a></li -->
+                            </ul>
+                        </div>
+		      		</td>
 		      	</tr>
         	@endforeach
         	</tbody>

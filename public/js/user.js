@@ -58,7 +58,7 @@ $(document).ready(function() {
                 minlength   : 'Please enter 11 digit valid phone number.'
             },
             password : {
-                required   : 'Please enter phone.',
+                required   : 'Please enter password.',
                 minlength  : 'Please enter at least 6 characters password'
             },
             confirm_password : {

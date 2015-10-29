@@ -7,6 +7,7 @@
                     <span class="pull-right clickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
                 </div>
                 {{ Form::open(array('url' => 'email-notification','method'=>'POST', 'name' => 'frmNotification', 'id'=>'frmNotification', 'class' => 'form-horizontal', 'role' => 'form')) }}
+                <input type="hidden" name="id" id="id" value="<?php echo $user->id; ?>"/>
                 <div id="email-notifications" class="panel-collapse collapse in">
                     <div class="panel-body">
 
@@ -30,7 +31,7 @@
                                 <button class="btn btn-lg btn-primary" type="submit">
                                     Save
                                 </button>
-                                <a href="<?php echo URL::to('/').'/timeline'; ?>">
+                                <a href="<?php echo URL::to('/').'/users'; ?>">
                 					<button type="button" class="btn btn-lg btn-default">Cancel</button>
             					</a>
                             </div>

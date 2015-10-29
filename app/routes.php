@@ -84,73 +84,46 @@ Route::group(array('before' => 'guest'), function() {
     
     Route::group(array('before' => 'csrf'), function() {
         // check login    
-        Route::post('/login', array('as' => 'login', 'uses' => 'UserController@postLogin'));
-        
-        // register (save)
-        Route::post('/register', array('as' => 'register', 'uses' => 'UserController@postRegister'));
-        
-        // forgot password (save)
-        Route::post('/forgot-password', array('as' => 'forgot-password', 'uses' => 'UserController@postForgotPassword'));
+        Route::post('/login', array('as' => 'login', 'uses' => 'UserController@postLogin'));       
     });    
     
     // user login
-    Route::get('/login', array('as' => 'login', 'uses' => 'UserController@getLogin'));
-    
-    // user registration
-    Route::get('/register', array('as' => 'register', 'uses' => 'UserController@getRegister'));    
-    
-    // user login
-    Route::get('/forgot-password', array('as' => 'forgot-password', 'uses' => 'UserController@getForgotPassword')); 
+    Route::get('/login', array('as' => 'login', 'uses' => 'UserController@getLogin'));  
 });
 
 Route::group(array('before' => 'auth'), function() {
     	
+	// User logout
+    Route::get('/logout', array('as' => 'logout', 'uses' => 'UserController@getSignOut'));
+			
     // dashboard page	
     Route::any('/dashboard', array('as' => 'dashboard', 'uses' => 'UserController@index'));
 	
 	// list site users
 	Route::any('/users', array('as' => 'users', 'uses' => 'UserController@getList'));
 	
-    // User logout
-    Route::get('/logout', array('as' => 'logout', 'uses' => 'UserController@getSignOut'));
-    
-    // Update ad
-    Route::get('/update-ad/{id}', array('as' => 'update-ad', 'uses' => 'AdController@getUpdate'));   
-    
-    // post/update ad information    
-    Route::post('/update-ad', array('as' => 'update-ad-post', 'uses' => 'AdController@postUpdate'));
-    
-    // user ads
-    Route::get('/manage-ads', array('as' => 'manage-ads', 'uses' => 'UserController@getManageads'));    
-        
-    // delete user ad
-    Route::post('/delete-user-ad/', array('as' => 'delete-user-ad', 'uses' => 'AdController@postDeleteUserAd'));
-    
-       
-    
-    // delete user ad
-    Route::get('/delete/{id}', array('as' => 'delete-ads', 'uses' => 'UserController@getDelete'));    
-    
+	// create new user
+	Route::get('/create-user', array('as' => 'create-user', 'uses' => 'UserController@getCreateUser'));	
+	
+    // update user
+	Route::get('/update-user/{slug}', array('as' => 'update-user', 'uses' => 'UserController@getUpdateUser'));    
+	
+	// manage user ads
+	Route::get('/user-ads/{slug}', array('as' => 'user-ads', 'uses' => 'UserController@getManageads'));
     
     Route::group(array('before' => 'csrf'), function() {        
-        try {
-            // change password    
-            Route::post('/change-password', array('as' => 'change-password', 'uses' => 'UserController@postChangePassword'));
-            
-            // update user profile
-            Route::post('/update-profile', array('as' => 'update-profile', 'uses' => 'UserController@postUpdateProfile'));
-            
-            // save/update email notifications
-           	Route::post('/email-notification', array('as' => 'email-notification', 'uses' => 'UserController@postEmailNotification'));
-			            
-            // report ad            
-            Route::post('/report', array('as' => 'report', 'uses' => 'MessageController@postReport'));
-            
-                
-            Route::post('/message/{id}', array('as' => 'message-detail', 'uses' => 'MessageController@postMessageDetail'));
-            
+        try {        	
+			// Create User
+			Route::post('/create-user', array('as' => 'create-user', 'uses' => 'UserController@postCreateUser'));
+			
+			// Update User
+			Route::post('/update-user', array('as' => 'update-user', 'uses' => 'UserController@postUpdateUser'));
+			
             // set profile photo
             Route::post('/set-user-profile-photo', array('as' => 'set-user-profile-photo', 'uses' => 'UserController@postSetPhoto'));
+			
+			// save/update email notifications
+            Route::post('/email-notification', array('as' => 'email-notification', 'uses' => 'UserController@postEmailNotification'));
         } catch (\Exception $e) {
             return Response::json(array(
                 'status' => 'ERROR', 
@@ -158,20 +131,4 @@ Route::group(array('before' => 'auth'), function() {
             ));
         } 
     });    
-});
-
-// Routes to create new ad
-Route::group(array('before' => 'create-new-ad'), function() {        
-    Route::get('/create-ad', array('as' => 'create-ad', 'uses' => 'AdController@getCreate'));    
-});
-
-
-
-Route::group(array('prefix', 'admin', 'before' => 'admin'), function()
-{
-    //
-    Route::get('/terms', array('as' => 'terms', function() {
-	    $view = View::make('pages.terms-conditions');
-	    return $view;
-	}));
 });

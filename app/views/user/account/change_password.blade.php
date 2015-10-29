@@ -7,6 +7,7 @@
                     <span class="pull-right clickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
                 </div>
                 {{ Form::open(array('url' => 'change-password','method'=>'POST', 'name' => 'frmChangePassword', 'id'=>'frmChangePassword', 'class' => 'form-horizontal', 'role' => 'form')) }}
+                <input type="hidden" name="id" id="id" value="<?php echo $user->id; ?>"/>
                 <div id="change-password" class="panel-collapse collapse in">
                     <div class="panel-body">
                         
@@ -37,7 +38,7 @@
                                 <button class="btn btn-lg btn-primary" type="submit">
                                     Change
                                 </button>
-                                <a href="<?php echo URL::to('/').'/timeline'; ?>">
+                                <a href="<?php echo URL::to('/').'/users'; ?>">
                 					<button type="button" class="btn btn-lg btn-default">Cancel</button>
             					</a>
                             </div>

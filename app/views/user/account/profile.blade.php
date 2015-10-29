@@ -3,13 +3,14 @@
         <div id="accordion">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h4 class="panel-title">My Profile</h4>
+                    <h4 class="panel-title">Profile</h4>
                     <span class="pull-right clickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
                 </div>
                 
                 <div id="account-info" class="panel-collapse collapse in">
                     <div class="panel-body">
                          {{ Form::open(array('url' => 'update-user-photo','method'=>'POST', 'name' => 'frmUserPhoto', 'id'=>'frmUserPhoto', 'class' => 'form-horizontal', 'role' => 'form')) }}
+                         <input type="hidden" name="id" id="id" value="<?php echo $user->id; ?>"/>
                         <div class="col-sm-2">
                             <?php $src = Config::get('app.user_img_path') . 'noimg.jpg';
                             if ($user->photo && $user->photo != '') {
@@ -32,7 +33,8 @@
                         <?php echo Form::token(); ?>
                         {{ Form::close() }}
                         
-                        {{ Form::open(array('url' => 'update-profile','method'=>'POST', 'name' => 'frmProfile', 'id'=>'frmProfile', 'class' => 'form-horizontal', 'role' => 'form')) }}
+                        {{ Form::open(array('url' => 'update-user','method'=>'POST', 'name' => 'frmProfile', 'id'=>'frmProfile', 'class' => 'form-horizontal', 'role' => 'form')) }}
+                        <input type="hidden" name="id" id="id" value="<?php echo $user->id; ?>"/>
                         <div class="col-sm-10">
                             <div class="form-group">
                                 <label for="First Name" class="col-sm-2 control-label custom-label">First Name*:</label>
@@ -114,7 +116,7 @@
                                     <button class="btn btn-lg btn-primary" type="submit">
                                         Save
                                     </button>
-                                    <a href="<?php echo URL::to('/').'/timeline'; ?>">
+                                    <a href="<?php echo URL::to('/').'/users'; ?>">
                     					<button type="button" class="btn btn-lg btn-default">Cancel</button>
                 					</a>
                                 </div>

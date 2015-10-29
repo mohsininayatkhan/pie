@@ -6,8 +6,13 @@
 @section('inner_content')
     @include('section.default_errors')    
     
+    <ol class="breadcrumb light-green-box">
+		<li><a href="<?php echo URL::to('/').'/users'; ?>">Users</a></li>
+		<li><a href="<?php echo URL::to('/').'/user-ads/'.$user->slug; ?>">Ads</a></li>
+	</ol>
+    
     @if (count($ads) || Request::input('status_user_ads') || Request::input('keyword_user_ads'))
-        {{ Form::open(array('url' => 'manage-ads','method'=>'GET', 'name' => 'frmUserAdsSearch', 'id'=>'frmUserAdsSearch', 'class' => 'form-horizontal', 'role' => 'form')) }}
+        {{ Form::open(array('url' => '/user-ads/'.$user->slug,'method'=>'GET', 'name' => 'frmUserAdsSearch', 'id'=>'frmUserAdsSearch', 'class' => 'form-horizontal', 'role' => 'form')) }}
         <div class="row">
             <div class="col-sm-12">
                 <div class="col-sm-12 well light-blue-box">
@@ -117,4 +122,8 @@
     {{ HTML::script('js/jquery.form.min.js') }}
     {{ HTML::script('js/user_account.js') }}
 
-@stop
+	@stop
+	
+	@section('left_menu')
+		@include('section.left_menu')
+	@stop

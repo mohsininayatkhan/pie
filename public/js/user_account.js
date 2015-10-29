@@ -62,83 +62,79 @@ $(document).ready(function() {
                 $('#user-'+next_location_id).html('');
                 return;
             }
-            html = '<label for="'+label+'" class="col-lg-2 control-label custom-label">'+label+':</label>'; 
-            html += '<div class="col-lg-10">';
+            html = '<label for="'+label+'" class="custom-label">'+label+':</label>'; 
             html += '<select name="'+next_location_id+'" class="form-control custom-label location" id="'+next_location_id+'">';
             html += '<option value="0">Select '+label+'</option>';
             $.each(json.locations, function(key, value) {
                 html += '<option value="'+value['id']+'">'+value[value_field]+'</option>';
             });
             html += '</select>';
-            html += '</div>';
             
             $('#user-'+next_location_id).html(html);
         });
         
     });
     
-
-    $("#frmProfile").validate({
+    
+    $("#frmCreateUser").validate({
         rules : {
-            first_name: {
+            first_name : {
                 required : true
             },
-            last_name: {
+            last_name : {
                 required : true
             },
-            phone: {
+            email : {
+                email : true,
+                required : true,
+                remote: {
+                    url: base_url+"/check-email",
+                    type: "post"
+                }
+            },
+            phone : {
                 number : true,
                 minlength :11
             },
             website: {
                 url: true
+            },
+            password : {
+                minlength : 6,
+                required : true
+            },
+            confirm_password : {
+                equalTo : "#password"
             }
         },
-        messages: {
-            first_name: {
-                required: 'Please enter first name.'
+        messages : {
+            first_name : {
+                required : 'Please enter first name.'
             },
-            last_name: {
+            last_name : {
                 required : 'Please enter last name.'
             },
-            phone: {
-                number: 'Please enter valid phone number.',
-                minlength: 'Please enter 11 digit valid phone number.'
+            email : {
+                required : 'Please enter email.',
+                email    : 'Please enter valid email.',
+                remote   : $.validator.format("Email already in use.")
+            },
+            phone : {
+                number      : 'Please enter valid phone number.',
+                minlength   : 'Please enter 11 digit valid phone number.'
             },
             website: {
                 url: 'Please enter valid URL.'
-            }
-        }
-    });
-    
-    
-    $("#frmChangePassword").validate({
-        rules: {
-            old_password: {
-                required: true
             },
-            new_password: {
-                minlength: 6,
-                required: true
-            },
-            confirm_password: {
-                equalTo: "#new_password"
-            }
-        },
-        messages: {
-            old_password: {
-                required: 'Please enter password.'
-            },
-            new_password: {
-                required: 'Please enter new password.',
-                minlength: 'Please enter atleast 6 characters.'
+            password : {
+                required   : 'Please enter password.',
+                minlength  : 'Please enter at least 6 characters password'
             },
             confirm_password : {
                 equalTo : 'Please enter same password.',
             }
         }
-    });
-    
+    });    
     
     // Update Profile
     var profile_options = { 
@@ -258,7 +254,7 @@ function profile_ChangePhoto(photo){
     
     ProgressBar.show();
     $.ajax({
-        url : 'set-user-profile-photo',
+        url : base_url+'/set-user-profile-photo',
         type : 'POST',
         data: new window.FormData($('#frmUserPhoto')[0]),
         cache: false,
@@ -294,6 +290,9 @@ function profileFormResponse(responseText, statusText) {
             toastr.error(responseText.message);
         } else if (responseText.status == 'SUCCESS') {
             toastr.success(responseText.message);
+            if (responseText.refresh) {
+            	location.href = base_url+"/update-user/"+responseText.user;
+            }
         }
     } else {
         
