@@ -86,7 +86,7 @@
         <input type="hidden" name="state" id="state" value=""/>
         <input type="hidden" name="city" id="city" value=""/>
         <input type="hidden" name="town" id="town" value=""/>
-        <input type="hidden" name="create_user" id="create_user" value="@if (!Auth::check()){{'yes'}}@endif"/>
+        <input type="hidden" name="user_id" id="user_id" value="{{ $user->id }}"/>
         <?php echo Form::token(); ?>
         
         <div class="form-group">
@@ -157,57 +157,7 @@
                 </div>
             </div>
         </div>
-        @if (!Auth::check())        
-        <br>
-        <div class="row">
-            <div class="col-sm-12">
-                <h4 class="page-header section-heading top-margin-zero">Create Account</h4>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label for="First Name" class="col-sm-2 control-label custom-label">First Name*:</label>
-            <div class="col-sm-10">
-                <input type="text" class="form-control custom-label" id="first_name" name="first_name">
-            </div>
-        </div>
         
-        <div class="form-group">
-            <label for="Last Name" class="col-sm-2 control-label custom-label">Last Name*:</label>
-            <div class="col-sm-10">
-                <input type="text" class="form-control custom-label" id="last_name" name="last_name">
-            </div>
-        </div>
-        
-        <div class="form-group">
-            <label for="Last Name" class="col-sm-2 control-label custom-label">Email*:</label>
-            <div class="col-sm-10">
-                <input type="text" class="form-control custom-label" id="email" name="email" value="<?php echo Input::get('email', Session::get('new_user_email'));?>">
-            </div>
-        </div>
-        
-        <div class="form-group">
-            <label for="Phone" class="col-sm-2 control-label custom-label">Phone*:</label>
-            <div class="col-sm-10">
-                <input type="text" maxlength="11" class="form-control custom-label" id="phone" name="phone" placeholder="XXXXXXXXXXX">
-            </div>
-        </div>
-        
-        <div class="form-group">
-            <label for="Password" class="col-sm-2 control-label custom-label">Password*:</label>
-            <div class="col-sm-10">
-                <input type="password" class="form-control custom-label" id="password" name="password">
-            </div>
-        </div>
-        
-        <div class="form-group">
-            <label for="Confirm Password" class="col-sm-2 control-label custom-label">Confirm Password*:</label>
-            <div class="col-sm-10">
-                <input type="password" class="form-control custom-label" id="confirm_password" name="confirm_password">
-            </div>
-        </div>
-        
-        @else
         <br>
         <div class="row">
             <div class="col-sm-12">
@@ -238,7 +188,6 @@
                 <div class="checkbox"><input type="checkbox" value="1" name="seller_phone_public" checked="checked" id="seller_phone_public"><label for="seller_phone_public">Display?</label></div>
             </div>
         </div>
-        @endif
         
         <br>
         <div class="row">

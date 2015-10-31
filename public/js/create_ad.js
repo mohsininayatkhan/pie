@@ -233,11 +233,7 @@ $(document).ready(function() {
                    
             } else if (responseText.status == 'SUCCESS') {
                 $('#ajax-error-messages').html('');
-                if (responseText.mode == 1) {
-                    window.location.href = base_url+"/thankyou/"+responseText.code_2;    
-                } else  {
-                    window.location.href = base_url+"/new-account-greeting/"+responseText.code_1; 
-                }
+                window.location.href = base_url+"/user-ads/"+responseText.user;                
             }
         } else {
             

@@ -32,9 +32,16 @@ class AdController extends BaseController
     {
     }
 
-    public function getCreate()
+    public function getCreate($user)
     {
         $view = View::make('ad.create.index');
+		
+		$users = User::where('slug', '=', $user)->get();
+		if (!count($users)) {
+            return Response::view('error', array(), 404);
+        }
+		$user = $users[0];		
+		
         $main_categories = Category::where('parent_id', '=', '0')->get();
         // States of Pakistan
         $states = State::where('country_id', '=', 1)->get();
@@ -42,7 +49,7 @@ class AdController extends BaseController
         $view->states = $states;
         
         if (Auth::check()) {
-            $view->user = Auth::user();    
+            $view->user = $user;    
         }        
         return $view;
     }
@@ -166,38 +173,7 @@ class AdController extends BaseController
 
         try {
                 
-            if (Auth::check()) {
-                $user = Auth::user(); 
-                $seller_name = input::get('contact_name');
-                
-                // user already exists
-                $user_mode = '1'; 
-            } else {
-                               
-                // new user created     
-                $user_mode = '0';
-                
-                $activation_hash = str_random(60);
-                
-                // creating user
-                $user_data = array(
-                    'fname'             => input::get('first_name'), 
-                    'lname'             => input::get('last_name'), 
-                    'email'             => input::get('email'), 
-                    'phone'             => input::get('phone'), 
-                    'slug'              => User::getSlug(input::get('first_name').' '.input::get('last_name')),
-                    'password'          => Hash::make(input::get('password')), 
-                    'activation_hash'   => $activation_hash, 
-                    'status'            => 'InActive'
-                );
-                $user = User::create($user_data);
-
-                //Auth::loginUsingId($user->id);
-                if (!$user) {
-                    return Response::json(array('status' => 'ERROR', 'messages' => 'Error while saving user information.'));
-                }                
-                $seller_name = input::get('first_name') . ' ' . input::get('last_name');
-            }
+           	$user = User::find(input::get('user_id'));
 
             $cat_levels = Category::getAllParents(input::get('cat'));
             
@@ -223,7 +199,7 @@ class AdController extends BaseController
                 'link'                	=> input::get('link'),
                 'price'                 => input::get('price', '0'), 
                 'price_negotiable'      => input::get('price_negotiable', '0'),
-                'seller_name'           => $seller_name, 
+                'seller_name'           => input::get('contact_name'), 
                 'seller_email'          => input::get('contact_email', $user->email), 
                 'seller_phone'          => input::get('contact_phone', $user->phone),
                 'seller_phone_public'   => input::get('seller_phone_public', '0'),
@@ -328,14 +304,13 @@ class AdController extends BaseController
             //throw $e;
         }
         DB::commit();
-        Session::forget('create_user');
         
-        if (!Auth::check()) {
+        /*if (!Auth::check()) {
             Mail::send('emails.auth.activation', array('link' => URL::route('activate-account', $activation_hash), 'username' => $user->fname), function($message) use ($user) {
                 $message->to($user->email, $user->fname)->subject('Activate your account');
             });
-        }
-        return Response::json(array('status' => 'SUCCESS', 'mode' => $user_mode, 'code_1' => Crypt::encrypt($user->id),  'code_2' => Crypt::encrypt($ad->id)));
+        }*/
+        return Response::json(array('status' => 'SUCCESS', 'user' => $user->slug));
     }
 
 

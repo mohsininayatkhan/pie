@@ -36,6 +36,16 @@ Route::post('/check-email', function() {
     }
 });
 
+Route::get('/get-category/{id}', function($id) {
+    $category = Category::where('id', '=', $id)->get();
+    if ($category) {
+        return Response::json(array('status' => 'SUCCESS', 'category' => $category ));
+    } else {
+        return Response::json(array('status' => 'ERROR', 'category' => '', 'message' => 'Error while getting category'));
+    }
+});
+
+
 // get categories attributes of ad
 Route::get('/ad/attributes/{id}', array('as' => 'attributes', 'uses' => 'AdController@getAttributes'));
 
@@ -110,6 +120,9 @@ Route::group(array('before' => 'auth'), function() {
 	
 	// manage user ads
 	Route::get('/user-ads/{slug}', array('as' => 'user-ads', 'uses' => 'UserController@getManageads'));
+	
+	// Create ad
+	Route::get('/create-ad/{slug}', array('as' => 'create-ad', 'uses' => 'AdController@getCreate')); 
     
     Route::group(array('before' => 'csrf'), function() {        
         try {        	
