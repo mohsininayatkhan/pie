@@ -31,7 +31,7 @@ $(document).ready(function() {
                    
             } else if (responseText.status == 'SUCCESS') {
                 $('#ajax-error-messages').html('');
-                window.location.href = base_url+"/manage-ads";
+                window.location.href = base_url+"/user-ads/"+responseText.user;
                 toastr.success('Ad updated successfully!');    
             }
         } else {

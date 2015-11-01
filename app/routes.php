@@ -79,17 +79,6 @@ Route::get('/get-locations/{location}/{id}', function($location, $id) {
 // Update ad
 Route::get('/user-profile/{id}', array('as' => 'user-profile', 'uses' => 'UserController@getPublicProfile'));
 
-
-
-
-// csrf check
-Route::group(array('before' => 'csrf'), function() {
-    // post/save ad information    
-    Route::post('/create-ad', array('as' => 'create-ad-post', 'uses' => 'AdController@postCreate'));
-	Route::post('/contact-us', array('uses' => 'ContactController@postContact'));
-});
-    
-     
 Route::group(array('before' => 'guest'), function() {
     
     Route::group(array('before' => 'csrf'), function() {
@@ -123,11 +112,23 @@ Route::group(array('before' => 'auth'), function() {
 	
 	// Create ad
 	Route::get('/create-ad/{slug}', array('as' => 'create-ad', 'uses' => 'AdController@getCreate')); 
+	
+	// Update ad
+	Route::get('/update-ad/{id}', array('as' => 'update-ad', 'uses' => 'AdController@getUpdate'));
+	
+	// delete ad image   
+    Route::get('/deleteadimg', array('as' => 'delete-ad-img', 'uses' => 'AdController@postDeleteImage'));
+	
+	// Delete user ad
+	Route::post('/delete-user-ad/', array('as' => 'delete-user-ad', 'uses' => 'AdController@postDeleteUserAd'));
     
     Route::group(array('before' => 'csrf'), function() {        
         try {        	
 			// Create User
 			Route::post('/create-user', array('as' => 'create-user', 'uses' => 'UserController@postCreateUser'));
+			
+			// Update Ad
+			Route::post('/update-ad', array('as' => 'update-ad-post', 'uses' => 'AdController@postUpdate'));
 			
 			// Update User
 			Route::post('/update-user', array('as' => 'update-user', 'uses' => 'UserController@postUpdateUser'));

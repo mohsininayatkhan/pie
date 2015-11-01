@@ -185,7 +185,7 @@
         <div class="form-group">
             <label for="Phone" class="col-sm-2 control-label custom-label">Phone*:</label>
             <div class="col-sm-8">
-                <input type="text" class="form-control" maxlength="11" name="contact_phone" id="contact_phone" value="<?php echo Input::get('contact_phone', $ad->phone); ?>" placeholder="XXXXXXXXXXX">
+                <input type="text" class="form-control" maxlength="11" name="contact_phone" id="contact_phone" value="<?php echo Input::get('contact_phone', $ad->seller_phone); ?>" placeholder="XXXXXXXXXXX">
             </div>
             <div class="col-sm-2">
                 <div class="checkbox"><input type="checkbox" value="1" <?php echo ($ad->seller_phone_public) ? 'checked="checked"' : '';?> name="seller_phone_public" id="seller_phone_public"><label for="seller_phone_public">Display?</label></div>
@@ -214,7 +214,7 @@
                 <button type="submit" class="btn btn-lg btn-primary">
                     Submit
                 </button>
-                <a href="<?php echo URL::to('/').'/manage-ads';?>">
+                <a href="<?php echo URL::to('/').'/user-ads/'.$user->slug;?>">
                     <button type="button" class="btn btn-lg btn-default">Cancel</button>
                 </a>
             </div>

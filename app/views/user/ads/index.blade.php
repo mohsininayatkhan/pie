@@ -10,6 +10,14 @@
 		<li><a href="<?php echo URL::to('/').'/users'; ?>">Users</a></li>
 		<li><a href="<?php echo URL::to('/').'/user-ads/'.$user->slug; ?>">Ads</a></li>
 	</ol>
+	
+	<div class="row">
+		<div class="col-sm-12">
+			<span class="btn-group pull-right">
+	            <a href="<?php echo URL::to('/').'/create-ad/'.$user->slug; ?>"><button type="button" class="btn btn-danger">Create Ad</button></a>
+	        </span>
+		</div>
+	</div><div class="clearfix visible-sm-block"></div></br>
     
     @if (count($ads) || Request::input('status_user_ads') || Request::input('keyword_user_ads'))
         {{ Form::open(array('url' => '/user-ads/'.$user->slug,'method'=>'GET', 'name' => 'frmUserAdsSearch', 'id'=>'frmUserAdsSearch', 'class' => 'form-horizontal', 'role' => 'form')) }}
@@ -107,7 +115,6 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="alert alert-info" role="alert" style="text-align: center;">Sorry! No record found.
-                    <button onclick="window.location=base_url+'/create-ad';" id="top-right-post-ad" type="button" class="btn btn-danger navbar-btn"><span class="glyphicon glyphicon-upload"></span> Place Ad</button>
                 </div>
             </div>          
         </div>

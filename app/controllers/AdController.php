@@ -156,7 +156,8 @@ class AdController extends BaseController
         foreach ($images_upload as $image) {
 
             $target_file = md5(uniqid()) . '-' . strtotime("now") . '.' . $image['extension'];
-            $target = 'uploads/ads/' . $target_file;
+            //$target = 'uploads/ads/' . $target_file;
+            $target = $_SERVER['DOCUMENT_ROOT'].Config::get('app.ad_img_path'). $target_file;
 
             if (move_uploaded_file($image['path'], $target)) {
                 $ad_images[] = $target_file;
@@ -316,7 +317,7 @@ class AdController extends BaseController
 
     public function getUpdate($id='')
     {            
-        $ads = Ad::search(array('user_id' => Auth::id(),'ad_id' => Crypt::decrypt($id)));
+        $ads = Ad::search(array('ad_id' => Crypt::decrypt($id)));
         if (!$ads) {
             return Response::view('error', array(), 404);
         }
@@ -338,8 +339,9 @@ class AdController extends BaseController
         foreach ($cat_levels as $level) {
             $cat .= $level['cat_name'].' > '; 
         }
-
-        $view->ad = $ads[0];        
+		
+        $view->ad = $ads[0];
+		$view->user = User::find($view->ad->user_id);        
         $view->category_lavels = $cat;
         $view->attributes = Attribute::whereRaw('category_id in (' . $categories . ')')->get();
         $view->images = Media::where('ad_id', '=', $ads[0]->id)->where('type', '=', 'Image')->get();
@@ -351,7 +353,7 @@ class AdController extends BaseController
     {
         $data = Input::all();
         
-        $ad = Ad::where('id', '=', $data['ad'])->where('user_id', '=', Auth::id())->get();
+        $ad = Ad::where('id', '=', $data['ad'])->get();
         $ad = $ad->first();
         
         if (!$ad) {
@@ -400,7 +402,8 @@ class AdController extends BaseController
         foreach ($images_upload as $image) {
 
             $target_file = md5(uniqid()) . '-' . strtotime("now") . '.' . $image['extension'];
-            $target = 'uploads/ads/' . $target_file;
+            //$target = 'uploads/ads/' . $target_file;
+			$target = $_SERVER['DOCUMENT_ROOT'].Config::get('app.ad_img_path'). $target_file;
 
             if (move_uploaded_file($image['path'], $target)) {
                 $ad_images[] = $target_file;
@@ -532,7 +535,9 @@ class AdController extends BaseController
             //throw $e;
         }
         DB::commit();
-        return Response::json(array('status' => 'SUCCESS'));
+		
+		$user = User::find($ad->user_id);
+        return Response::json(array('status' => 'SUCCESS', 'user' => $user->slug));
     }
 
     public function getAttributes($ids = '')
@@ -571,7 +576,7 @@ class AdController extends BaseController
     {
         $data = Input::all();
         
-        $ad = Ad::where('id', '=', $data['ad'])->where('user_id', '=', Auth::id())->get();
+        $ad = Ad::where('id', '=', $data['ad'])->get();
         $ad = $ad->first();
         
         if (!$ad) {
@@ -582,7 +587,7 @@ class AdController extends BaseController
             $affected_rows = Media::where('file', '=', $data['img'])->delete();
         
             if ($affected_rows) {
-                File::delete(Config::get('app.ad_img_path').$data['img']);
+                File::delete($_SERVER['DOCUMENT_ROOT'].Config::get('app.ad_img_path').$data['img']);
                 
                 // if main ad image
                 $main_img_count = Media::where('ad_id', '=', $data['ad'])->where('type', '=', 'Image')->where('main', '=', '1')->count();
@@ -611,7 +616,7 @@ class AdController extends BaseController
         $data = Input::all();
         
         $id = Crypt::decrypt($data['ad']);
-        $ad = Ad::where('id', '=', $id)->where('user_id', '=', Auth::id())->get();
+        $ad = Ad::where('id', '=', $id)->get();
         $ad = $ad->first();
         
         if (!$ad) {
